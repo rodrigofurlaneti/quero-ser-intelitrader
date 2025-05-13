@@ -8,6 +8,14 @@ Você gosta de programar e aprender? Aqui é o lugar certo.
 
 Temos uma cultura focada em formação e vamos te ensinar tudo que você precisa para virar um Engenheiro ou Engenheira de Software. Temos demanda para backend e frontend.
 
+## Vaga de Auxiliar administrativo (não dev)
+
+Para se candidatar, preencha o formulário que está em https://forms.gle/qJ2oDUjV4HUxzNTJ9
+
+## Vaga de Desenvolvedor(a)
+
+**Não temos vagas com esse perfil abertas no momento.**
+
 Usamos Scrum, Git, Visual Studio e Visual Studio Code.
 
 Aqui usamos bastante C#. Usamos também C++ (para alto desempenho), ReactJs (front) e Python e PHP (algumas ferramentas internas e scripts em geral).
