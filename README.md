@@ -3,14 +3,14 @@
 ## [Quem somos](id:OqEhAIntelitrader)
 A [Intelitrader](http://www.intelitrader.com.br) é uma empresa de software especializada no desenvolvimento de **software para o mercado financeiro**. A empresa foi fundada em 2011 e temos como clientes corretoras de valores, bancos e gestoras de investimentos. Não podemos colocar o nome dos clientes aqui por motivos contratuais, mas todas as grandes corretoras de valores são nossos clientes.
 
+## Vaga de Auxiliar administrativo (não dev)
+
+Para se candidatar, preencha o formulário que está em https://forms.gle/qJ2oDUjV4HUxzNTJ9
+
 ## [Sobre as vagas](id:SobreAsVagas)
 Você gosta de programar e aprender? Aqui é o lugar certo. 
 
 Temos uma cultura focada em formação e vamos te ensinar tudo que você precisa para virar um Engenheiro ou Engenheira de Software. Temos demanda para backend e frontend.
-
-## Vaga de Auxiliar administrativo (não dev)
-
-Para se candidatar, preencha o formulário que está em https://forms.gle/qJ2oDUjV4HUxzNTJ9
 
 ## Vaga de Desenvolvedor(a)
 
