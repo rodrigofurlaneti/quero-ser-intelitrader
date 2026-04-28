@@ -46,6 +46,7 @@ Foco em Concorrência Real: Pedir explicitamente o tokio::select! no Rust e Syst
 
 Garantia de Dados: A inclusão do arquivo .offset resolve o problema de resiliência que a Intelitrader mencionou como critério de avaliação.
 
+```mermaid
 sequenceDiagram
     participant WA as WhatsApp (SQLite)
     participant Agent as Agente Nativo (Rust)
@@ -57,13 +58,13 @@ sequenceDiagram
     WA->>Agent: Nova inserção detectada (Polling O(1)/WAL)
     Agent->>Agent: Lê byte[] e mapeia para JSON
     Agent->>Redis: XADD (Stream: whatsapp_messages)
-    Redis->>API: Pub/Sub ou Consumer Group Signal
-    API->>User: Update Real-time (Console/SignalR)
+    Redis->>API: Signal (Consumer Group)
+    API->>User: Output Real-time (Console/SignalR)
 
     Note over User, WA: Fluxo B: Inserção de Contatos
     User->>API: POST /contacts (JSON)
-    API->>API: Valida Domain Entities (DDD)
+    API->>API: Valida Domain (DDD/Value Objects)
     API->>Redis: LPUSH (List: contact_queue)
     Redis->>Agent: BRPOP (Blocking Listen)
-    Agent->>WA: Content Insert (Android System)
-    Agent-->>API: ACK (Opcional: Sucesso/Erro)
+    Agent->>WA: content insert (Android Provider)
+    Agent-->>API: ACK via Redis Hash (Opcional)```
