@@ -61,6 +61,4 @@ Se você deseja se candidatar a uma vaga de **Suporte Técnico** siga as instru�
 
 * Regime: **PJ**;
 * Período: **Integral**;
-  
 * Contratação: **Imediata**;
-
