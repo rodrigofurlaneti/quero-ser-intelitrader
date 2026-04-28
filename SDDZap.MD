@@ -45,3 +45,25 @@ Terminologia de Especialista: O uso de termos como Zero-Copy, At-least-once deli
 Foco em Concorrência Real: Pedir explicitamente o tokio::select! no Rust e System.Threading.Channels no .NET resolve o maior gargalo desse desafio: a coordenação de múltiplas tarefas de IO.
 
 Garantia de Dados: A inclusão do arquivo .offset resolve o problema de resiliência que a Intelitrader mencionou como critério de avaliação.
+
+sequenceDiagram
+    participant WA as WhatsApp (SQLite)
+    participant Agent as Agente Nativo (Rust)
+    participant Redis as Redis (Broker)
+    participant API as API .NET 9 (CQRS)
+    participant User as Dashboard/Client
+
+    Note over WA, Agent: Fluxo A: Monitoramento de Mensagens
+    WA->>Agent: Nova inserção detectada (Polling O(1)/WAL)
+    Agent->>Agent: Lê byte[] e mapeia para JSON
+    Agent->>Redis: XADD (Stream: whatsapp_messages)
+    Redis->>API: Pub/Sub ou Consumer Group Signal
+    API->>User: Update Real-time (Console/SignalR)
+
+    Note over User, WA: Fluxo B: Inserção de Contatos
+    User->>API: POST /contacts (JSON)
+    API->>API: Valida Domain Entities (DDD)
+    API->>Redis: LPUSH (List: contact_queue)
+    Redis->>Agent: BRPOP (Blocking Listen)
+    Agent->>WA: Content Insert (Android System)
+    Agent-->>API: ACK (Opcional: Sucesso/Erro)
