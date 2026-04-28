@@ -5,16 +5,16 @@ A Intelitrader é uma empresa de software especializada no desenvolvimento de so
 Sobre as vagas
 Você gosta de programar e aprender? Aqui é o lugar certo.
 
-Temos uma cultura focada em formação e vamos te ensinar tudo que você precisa para virar um Engenheiro ou Engenheira de Software. Temos demanda para backend e frontend.
+Temos uma cultura focada em formação e vamos te ensinar tudo que você precisa para virar um(a) Engenheiro(a) de Software. Nossa demanda atual é backend, você precisa saber de Linux além de saber programar.
 
-Usamos Scrum, Git, Visual Studio e Visual Studio Code.
+Usamos Scrum, Git, Linux, C#, C++, PHP, Python, JS.
 
 Aqui usamos bastante C# e C++. Usamos também JavaScript (front) e Python (algumas ferramentas internas).
 
 Onde vocês ficam?
 Nossa sede é em São Paulo mas todo mundo é home office com horário flexível. Desde 2012. Tem gente de todo o Brasil trabalhando para Intelitrader.
 
-Mesmo acabando a pandemia você terá a opção de trabalhar de casa, no horário que for melhor para você.
+O horário é flexível, o cumprimento dos combinados é muito mais importante que estar online em horário comercial. Cumprindo com os combinados, não tem problema nenhum ir para a academia às 11h, ao cinema quarta-feira às 15h e não pedimos justificativas para ausências pessoais. É só entregar a sprint e aparecer na daily.
 
 Requisitos Básicos (para todas as vagas)
 Não nos importamos com formação.
