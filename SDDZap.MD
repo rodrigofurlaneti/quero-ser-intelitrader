@@ -1,58 +1,47 @@
-Script de Prompt SDD (Arquitetura e Implementação)
-Copie e adapte o prompt abaixo para iniciar o desenvolvimento de cada módulo:
+PROMPT SDD: Engenharia de Integração Real-Time (Android NDK & .NET 9)
+Persona: Atue como um Arquiteto de Software Especialista em Sistemas de Baixa Latência e Engenharia de Concorrência.
 
-Atue como um Arquiteto de Sistemas Sênior. Vamos resolver o desafio técnico de integração Android Real-Time via Redis.
+🎯 Objetivo do Prompt
+Desenvolver um ecossistema de sincronização bidirecional entre o ambiente restrito do Android (via NDK) e uma API .NET 9, utilizando Redis como barramento de eventos de alta performance.
 
-1. Visão Geral da Solução
-Agente Nativo (Android): Desenvolvido em Rust (pela segurança de memória e performance) rodando via NDK.
+🏗️ 1. Módulo Android Nativo (Rust Engine)
+Contexto: O binário deve ser compilado para arquiteturas aarch64 e x86_64 (emulador).
+Task: Gere o design e implementação focando em:
 
-Middleware: Redis (usando Streams para mensagens e Pub/Sub para comandos de contatos).
+Monitoramento High-Performance: Implemente a lógica de leitura do msgstore.db-wal utilizando Zero-Copy sempre que possível. Use o padrão Observer para detectar alterações no arquivo de log do SQLite.
 
-Backend: .NET 9 seguindo Clean Architecture e CQRS.
+Gestão de Estado (Checkpointing): Crie um mecanismo de persistência local (ex: um arquivo .offset) para salvar o last_processed_id. O código deve garantir que nenhuma mensagem seja perdida em caso de reinicialização do agente (Garantia At-least-once delivery).
 
-2. Módulo Android (Rust + SQLite + Redis)
-Preciso do design técnico e código para:
+Concorrência com Tokio: Utilize tokio::select! para orquestrar o stream de leitura do SQLite e a subscrição no Redis (Pub/Sub) de forma não-bloqueante.
 
-Monitoramento O(1): Como monitorar o msgstore.db do WhatsApp Business sem onerar a CPU. Considere o uso de inotify no arquivo -wal ou um polling inteligente baseado no last_rowid da tabela messages.
+Segurança de Memória: O código Rust deve evitar unsafe e garantir o fechamento correto dos file descriptors ao receber sinais do SO (SIGTERM).
 
-Concorrência: Uso de tokio ou async-std em Rust para manter duas threads: uma de leitura (SQLite -> Redis) e uma de escuta (Redis -> Android Contacts).
+🛠️ 2. Módulo Backend (.NET 9 + CQRS)
+Contexto: Aplique rigorosamente os princípios de Clean Architecture e TDD.
+Task: Estruture o projeto seguindo:
 
-Escrita de Contatos: Script para executar content insert via std::process::Command no Android para inserir o JSON recebido do Redis na agenda do sistema.
+Domain-Driven Design: Crie a Entidade Contact com validações de Value Objects para o número de telefone (Regex E.164).
 
-3. Módulo .NET (.NET 9 + StackExchange.Redis)
-Desenvolva a estrutura seguindo meus princípios:
+CQRS com MediatR: Implemente o CreateContactCommand e o MessageReceivedIntegrationEvent.
 
-Domain: Entidades WhatsAppMessage e SystemContact.
+Infrastructure (Redis): * Configure a ConnectionMultiplexer como Singleton.
 
-Infrastructure: Implementação de um RedisConsumer (IHostedService) para ler mensagens em tempo real e um RedisPublisher para enviar contatos.
+Implemente um IHostedService que utilize System.Threading.Channels para atuar como um Buffer interno, garantindo que o processamento das mensagens lidas do Redis não bloqueie a thread de IO.
 
-API: Controller minimalista com endpoint POST /contacts.
+Imutabilidade: Utilize public record para todos os DTOs e Integration Events.
 
-4. Resiliência e Segurança
-Como garantir que, se o Agente Nativo perder conexão com o Redis, ele não perca mensagens do SQLite que ocorreram durante o downtime? (Estratégia de Checkpointing).
+🛡️ 3. Resiliência e Observabilidade
+Task: Forneça estratégias para:
 
-Tratamento de erros para permissões de acesso ao /data/data/com.whatsapp.w4b/.
+Circuit Breaker: Como a API .NET deve se comportar se o Redis estiver inacessível (uso de Polly).
 
-Pontos Chave para a sua Tomada de Decisão
-Para brilhar no vídeo e na entrevista técnica, considere estas definições que alinhei com seu perfil:
+Backpressure: Como o Agente Rust deve lidar com um Redis lento para não estourar a memória do dispositivo Android.
 
-A. O Desafio do SQLite (Ação A)
-O WhatsApp usa WAL Mode. Isso significa que as mensagens novas entram primeiro no arquivo msgstore.db-wal.
+Permissões de Root: Script de verificação de permissão de leitura em /data/data/ antes da execução do loop principal.
 
-Decisão Técnica: Em vez de ler o banco inteiro, você deve abrir a conexão em modo ReadOnly e buscar apenas registros onde _id > last_processed_id. Isso garante a performance que você busca.
+💡 Por que esta versão é melhor?
+Terminologia de Especialista: O uso de termos como Zero-Copy, At-least-once delivery, Backpressure e File Descriptors sinaliza para a IA que você não aceita soluções triviais.
 
-B. Inserção de Contatos (Ação B)
-No Android, inserir um contato via binário nativo (sem ser uma App Java/Kotlin formal) exige interagir com o content provider do sistema.
+Foco em Concorrência Real: Pedir explicitamente o tokio::select! no Rust e System.Threading.Channels no .NET resolve o maior gargalo desse desafio: a coordenação de múltiplas tarefas de IO.
 
-Comando Sugerido: ```bash
-content insert --uri content://com.android.contacts/raw_contacts --bind account_name:s:PROJETO_DESAFIO --bind account_type:s:com.google
-
-
-C. A Camada .NET (Sua Especialidade)
-Aplique o que você está fazendo no seu projeto Finance Manager:
-
-Use Dependency Injection rigorosa.
-
-Configure o Redis com AbortOnConnectFail = false para que a API não quebre se o broker demorar a subir.
-
-Considere usar Records do C# para os DTOs de mensagem, garantindo imutabilidade.
+Garantia de Dados: A inclusão do arquivo .offset resolve o problema de resiliência que a Intelitrader mencionou como critério de avaliação.
